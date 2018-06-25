@@ -1,0 +1,7 @@
+.notDisplayed {
+    background-color: gray;
+}
+
+.displayed {
+    background-color: yellow;
+}
