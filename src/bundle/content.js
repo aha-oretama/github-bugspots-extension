@@ -1,3 +1,4 @@
+'use strict';
 /**
  * @author aha-oretama
  * @Date 2018/05/27.
@@ -22,7 +23,7 @@ function exeBugspots(callback) {
   
   return chrome.storage.sync.get(['token','regex'], function(data) {
     chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-      parse = parseUrl(tabs);
+      const parse = parseUrl(tabs);
       return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, data.regex)
         .then(callback)
         .catch(e => {
