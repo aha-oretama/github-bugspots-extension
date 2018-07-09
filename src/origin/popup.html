@@ -13,6 +13,9 @@
       width: 100%;
       text-align: center;
     }
+    a image {
+      border: none;
+    }
     input {
       background-color: #fafbfc;
       line-height: 20px;
@@ -44,12 +47,12 @@
 </head>
 <body>
 <div class="panel">
-  <img src="images/github-bugspots-logo.png" alt="github-bugspots-logo" title="github-bugspots-logo"/>
+  <a href="#" id="github-bugspots-log"><img src="images/github-bugspots-logo.png" alt="github-bugspots-logo" title="github-bugspots-logo"/></a>
   <input type="text" id="token" name="token" placeholder="Input your GitHub token."/>
-  <span class="supplement">You can get your token <a href="https://github.com/settings/tokens">here</a>.</span>
+  <span class="supplement">You can get your token <a href="#" id="supplement">here</a>.</span>
   <input type="text" id="regex" name="regex" placeholder="Input bugfix indicator regex.">
-  <button id="saveToken">Save</button>
-  <script src="popup.js"></script>
+  <button id="save">Save</button>
 </div>
+<script src="popup.js"></script>
 </body>
 </html>
