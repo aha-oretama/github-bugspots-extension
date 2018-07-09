@@ -1,8 +1,8 @@
 {
-  "name": "github-bugspots",
+  "name": "github-bugspots-extension",
   "version": "0.0.1",
   "private": true,
-  "repository": "https://github.com/aha-oretama/github-bugspots.git",
+  "repository": "https://github.com/aha-oretama/github-bugspots-extension.git",
   "author": "aha-oretama",
   "license": "MIT",
   "scripts": {
