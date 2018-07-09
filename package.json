@@ -9,10 +9,7 @@
     "build": "webpack"
   },
   "dependencies": {
-    "@octokit/rest": "^15.8.0",
-    "co": "^4.6.0",
-    "js-git": "^0.7.8",
-    "js-github": "^1.1.0",
+    "github-bugspots": "^0.1.0",
     "lodash": "^4.17.10"
   },
   "devDependencies": {

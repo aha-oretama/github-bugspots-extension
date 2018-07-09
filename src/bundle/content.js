@@ -2,7 +2,7 @@
  * @author aha-oretama
  * @Date 2018/05/27.
  */
-import Bugspots from './bugspots';
+import Bugspots from 'github-bugspots';
 
 const commitBar = document.getElementsByClassName('commit-tease')[0];
 
