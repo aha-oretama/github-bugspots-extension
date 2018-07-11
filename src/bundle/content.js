@@ -13,8 +13,7 @@ import Bugspots from 'github-bugspots';
 function exeBugspots(callback) {
   const branch = document.querySelector('.branch-select-menu > button > span').innerHTML;
   
-  const parseUrl = (tabs) => {
-    const url = tabs[0].url;
+  const parseUrl = (url) => {
     const parts = url.split('/'); // https://github.com/aha-oretama/github-bugspots-extension
     const organization = parts[3];
     const repository = parts[4];
@@ -22,29 +21,33 @@ function exeBugspots(callback) {
   };
   
   return chrome.storage.sync.get(['token','regex'], function(data) {
-    chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-      const parse = parseUrl(tabs);
-      return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, data.regex)
-        .then(callback)
-        .catch(e => {
-          console.log(e);
-        });
-    });
+    const parse = parseUrl(location.href);
+    return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, new RegExp(data.regex, "i"))
+      .then(callback)
+      .catch(e => {
+        console.log(e);
+      });
   });
 }
 
 function storeBugspotsData(bugspots) {
   return chrome.storage.local.set({'bugspots': bugspots}, function (data) {
-    console.log('bugspots: ' + data.bugspots);
+    console.log('set bugspots: ' + data.bugspots);
   })
 }
 
 function turnOn() {
-  return exeBugspots(storeBugspotsData);
+  return exeBugspots(function (data) {
+    storeBugspotsData(data);
+    addScore(data);
+  });
 }
 
 function turnOff() {
-  return chrome.storage.local.remove('bugspots');
+  chrome.storage.local.remove('bugspots', function (data) {
+    console.log('remove bugspots');
+  });
+  removeScore();
 }
 
 function addScore() {
@@ -56,54 +59,55 @@ function addScore() {
     return;
   }
   
-  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-    const url = tabs[0].url;
-    chrome.storage.local.get('bugspots', function (data) {
-      for(let spot of data.bugspots.spots) {
-        for (let i = 0; i < fileNames.length; i++) {
-          
-          // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
-          if((`${url}/${fileNames[i]}`).endsWith(spot.file)) {
-            let score = document.createElement('a');
-            score.className = 'score';
-            score.innerHTML(`${spot.score}`);
-            ageSpans[i].appendChild();
-          }
+  const url = location.href;
+  chrome.storage.local.get('bugspots', function (data) {
+    for(let spot of data.bugspots.spots) {
+      for (let i = 0; i < fileNames.length; i++) {
+        
+        // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
+        if((`${url}/${fileNames[i]}`).endsWith(spot.file)) {
+          let score = document.createElement('a');
+          score.className = 'score';
+          score.innerHTML(`${spot.score}`);
+          ageSpans[i].appendChild();
         }
       }
-    })
+    }
   });
 }
 
 function removeScore() {
   let score = document.querySelector('a.score');
-  if(!score) {
+  if (score) {
     score.remove();
   }
 }
 
-const commitBar = document.getElementsByClassName('commit-tease')[0];
-let div = document.createElement('div');
-div.className = 'github-bugspots-controller';
-let button = document.createElement('button');
-button.className = 'btn btn-sm notDisplayed';
-button.innerHTML = 'bugspots';
-
-button.addEventListener('click', function (event) {
-  let button = event.target;
-  if (button.classList.contains('notDisplayed')) {
-    button.classList.remove('notDisplayed');
-    button.classList.add('displayed');
-    turnOn();
-    addScore()
-  } else {
-    button.classList.remove('displayed');
-    button.classList.add('notDisplayed')
-  
-    turnOff();
-    removeScore()
+(function onload() {
+  const commitBar = document.getElementsByClassName('commit-tease')[0];
+  if(!commitBar) {
+    return
   }
-});
-
-div.appendChild(button);
-commitBar.appendChild(div);
+  
+  let div = document.createElement('div');
+  div.className = 'github-bugspots-controller';
+  let button = document.createElement('input');
+  button.className = 'btn btn-sm gb-button gb-displayed';
+  button.setAttribute("type", "image");
+  button.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACLlBMVEUAAAAqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgqstgqstgsstkqstgqstgqstgqstgqstgsstkqstgqstgqstgpsdgqstgqstgqstgts9gqstgpstgqstgttNkpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgosdgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstj///8rAbqCAAAAuHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwdARpZ7UDEML8D59fT8oS4IP+bph0NJmvPXIQt18mhSPAOK7mIHKd/PKnjWxmY06b8RDL3AEov3aBzdnQQo1OAiW7/AOD7xuRZN9aEwDxY3vOgwMbTsz5KY2+KdHAEGkcvp4MpzABBibmFjb1YHTPTxOFv85S6O/c4SKub3agM4XXUACYZRLwMKAQsBWiMI7AAAAAFiS0dEuTq4FmAAAAAHdElNRQfiBwgXNCaQgicpAAAA6ElEQVQY02NgAANGbR0mBjhgZtHV0zcwNGKF8tmMTUzNzC0sraxt2MECHLZ29g6OTs4urm6cID6Xu4enF7e3j6+ff0AgD1CANyg4JDQsPCIyKjomlg8owB8Xn5CYtCM5JTUtPUMAKCCYmZWdk5uXX1BYVFwiBBQQFiktK6+orKquqa0TFQOZKl7f0NjU3NLa1t4hAbZWsrOru6e3r3+C1ERpiMtkJk2eMnXa9BkzZSF8OflZs+fMnTd/wUIFiICi0qLFS5YuW75ipbIKWEB11eo1a9et37Bxk5o61Hsam7dobt22XQvEBgCP3EJ9EpKLQwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wNy0wOFQyMzo1MjozOC0wNDowMDdKhBkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDctMDhUMjM6NTI6MzgtMDQ6MDBGFzylAAAAAElFTkSuQmCC");
+  
+  button.addEventListener('click', function (event) {
+    let button = event.target;
+    if (button.classList.contains('selected')) {
+      button.classList.remove('selected');
+      turnOff();
+      removeScore();
+    } else {
+      button.classList.add('selected');
+      turnOn();
+    }
+  });
+  
+  div.appendChild(button);
+  commitBar.appendChild(div);
+})();

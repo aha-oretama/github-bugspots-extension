@@ -1,7 +1,12 @@
-.notDisplayed {
+.gb-not-displayed {
     background-color: gray;
 }
 
-.displayed {
+.gb-displayed {
     background-color: yellow;
+}
+
+.gb-button {
+    margin-left: 5px;
+    padding: 1px 8px;
 }

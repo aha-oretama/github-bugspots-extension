@@ -9,12 +9,12 @@ const save = document.querySelector('#save');
 
 chrome.storage.sync.get('token', function(data) {
   console.log('token: ' + data.token);
-  token.value = data.token;
+  token.value = data.token || '';
 });
 
 chrome.storage.sync.get('regex', function(data) {
   console.log('regex: ' + data.regex);
-  regex.value = data.regex || '/\b(fix(es|ed)?|close(s|d)?)\b/i'
+  regex.value = data.regex || "\\b(fix(es|ed)?|close(s|d)?)\\b"
 });
 
 document.querySelector('#supplement').addEventListener('click', function () {
