@@ -1,12 +1,12 @@
-.gb-not-displayed {
-    background-color: gray;
-}
-
-.gb-displayed {
-    background-color: yellow;
-}
-
 .gb-button {
-    margin-left: 5px;
     padding: 1px 8px;
+}
+
+.gb-score {
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.gb-controller {
+    margin-right: 5px;
 }

@@ -52,6 +52,7 @@ function turnOff() {
 
 function addScore(data) {
   let fileNames = Array.from(document.querySelectorAll('td.content > span > a'), it => it.innerHTML);
+  let isFile = Array.from(document.querySelectorAll('tr.js-navigation-item > td.icon > svg'), it => it.classList.contains('octicon-file'));
   let ageSpans = document.querySelectorAll('td.age > span');
 
   // 該当ページでなければスキップ
@@ -60,18 +61,22 @@ function addScore(data) {
   }
   
   const url = location.href;
-  for (let spot of data.spots) {
-    for (let i = 0; i < fileNames.length; i++) {
-      
+  for (let i = 0; i < fileNames.length; i++) {
+    let text = isFile[i] ? `${Number(0).toFixed(4)}` : '-' ;
+
+    for (let spot of data.spots) {
       // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
       if ((`${url}/${fileNames[i]}`).endsWith(spot.file)) {
-        let score = document.createElement('a');
-        let text = document.createTextNode(`${spot.score}`);
-        score.appendChild(text);
-        score.className = 'score';
-        ageSpans[i].appendChild(score);
+        text = `${spot.score.toFixed(4)}`;
       }
     }
+    
+    let score = document.createElement('a');
+    let textNode = document.createTextNode(text);
+    score.appendChild(textNode);
+    score.className = 'gb-score';
+    let firstChild = ageSpans[i].firstChild;
+    ageSpans[i].insertBefore(score, firstChild);
   }
 }
 
@@ -83,13 +88,13 @@ function removeScore() {
 }
 
 (function onload() {
-  const commitBar = document.getElementsByClassName('commit-tease')[0];
+  const commitBar = document.querySelector('.commit-tease');
   if(!commitBar) {
     return
   }
   
   let div = document.createElement('div');
-  div.className = 'github-bugspots-controller';
+  div.className = 'gb-controller';
   let button = document.createElement('input');
   button.className = 'btn btn-sm gb-button gb-displayed';
   button.setAttribute("type", "image");
@@ -108,5 +113,6 @@ function removeScore() {
   });
   
   div.appendChild(button);
-  commitBar.appendChild(div);
+  const lastChild = _.last(commitBar.querySelectorAll('div'));
+  commitBar.insertBefore(div, lastChild);
 })();
