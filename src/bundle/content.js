@@ -43,7 +43,7 @@ function storeBugspotsData(bugspots) {
 
 function turnOn() {
   startLoading();
-  return exeBugspots(function (data) {
+  const innerTurnOn = (data) => {
     endLoading();
     if (data.tokenError) {
       window.alert("The token does not set. Please set your token from github-bugspots icon in toolbar.");
@@ -53,9 +53,16 @@ function turnOn() {
       window.alert("github-bugspots has errors. Please report the issue(https://github.com/aha-oretama/github-bugspots-extension/issues).")
       return;
     }
-
+    
     storeBugspotsData(data);
     addScore(data);
+  };
+  
+  return chrome.storage.local.get('bugspots', function (data) {
+    if(Object.keys(data).length === 0) {
+      return exeBugspots(innerTurnOn);
+    }
+    return innerTurnOn(data.bugspots);
   });
 }
 
@@ -125,7 +132,7 @@ function removeScore() {
   let div = document.createElement('div');
   div.className = 'gb-controller';
   let button = document.createElement('input');
-  button.className = 'btn btn-sm gb-button gb-displayed';
+  button.className = 'btn btn-sm gb-button';
   button.setAttribute("type", "image");
   button.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACLlBMVEUAAAAqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgqstgqstgsstkqstgqstgqstgqstgqstgsstkqstgqstgqstgpsdgqstgqstgqstgts9gqstgpstgqstgttNkpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgosdgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstj///8rAbqCAAAAuHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwdARpZ7UDEML8D59fT8oS4IP+bph0NJmvPXIQt18mhSPAOK7mIHKd/PKnjWxmY06b8RDL3AEov3aBzdnQQo1OAiW7/AOD7xuRZN9aEwDxY3vOgwMbTsz5KY2+KdHAEGkcvp4MpzABBibmFjb1YHTPTxOFv85S6O/c4SKub3agM4XXUACYZRLwMKAQsBWiMI7AAAAAFiS0dEuTq4FmAAAAAHdElNRQfiBwgXNCaQgicpAAAA6ElEQVQY02NgAANGbR0mBjhgZtHV0zcwNGKF8tmMTUzNzC0sraxt2MECHLZ29g6OTs4urm6cID6Xu4enF7e3j6+ff0AgD1CANyg4JDQsPCIyKjomlg8owB8Xn5CYtCM5JTUtPUMAKCCYmZWdk5uXX1BYVFwiBBQQFiktK6+orKquqa0TFQOZKl7f0NjU3NLa1t4hAbZWsrOru6e3r3+C1ERpiMtkJk2eMnXa9BkzZSF8OflZs+fMnTd/wUIFiICi0qLFS5YuW75ipbIKWEB11eo1a9et37Bxk5o61Hsam7dobt22XQvEBgCP3EJ9EpKLQwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wNy0wOFQyMzo1MjozOC0wNDowMDdKhBkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDctMDhUMjM6NTI6MzgtMDQ6MDBGFzylAAAAAElFTkSuQmCC");
   
@@ -138,6 +145,12 @@ function removeScore() {
     } else {
       button.classList.add('selected');
       turnOn();
+    }
+  });
+  chrome.storage.local.get('bugspots', function (data) {
+    if (Object.keys(data).length !== 0) {
+      document.querySelector('input.gb-button').classList.add('selected');
+      addScore(data.bugspots);
     }
   });
   
