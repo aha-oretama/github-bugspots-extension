@@ -81,9 +81,11 @@ function addScore(data) {
 }
 
 function removeScore() {
-  let score = document.querySelector('a.score');
-  if (score) {
-    score.remove();
+  let scores = document.querySelectorAll('a.gb-score');
+  if (scores) {
+    for(let score of scores) {
+      score.remove();
+    }
   }
 }
 
