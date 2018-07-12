@@ -21,11 +21,16 @@ function exeBugspots(callback) {
   };
   
   return chrome.storage.sync.get(['token','regex'], function(data) {
+    if(!data.token) {
+      return callback({tokenError: true});
+    }
+    
     const parse = parseUrl(location.href);
     return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, new RegExp(data.regex, "i"))
       .then(callback)
       .catch(e => {
         console.log(e);
+        callback({error: true})
       });
   });
 }
@@ -39,9 +44,18 @@ function storeBugspotsData(bugspots) {
 function turnOn() {
   startLoading();
   return exeBugspots(function (data) {
+    endLoading();
+    if (data.tokenError) {
+      window.alert("The token does not set. Please set your token from github-bugspots icon in toolbar.");
+      return;
+    }
+    if (data.error) {
+      window.alert("github-bugspots has errors. Please report the issue(https://github.com/aha-oretama/github-bugspots-extension/issues).")
+      return;
+    }
+
     storeBugspotsData(data);
     addScore(data);
-    endLoading();
   });
 }
 
