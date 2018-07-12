@@ -32,22 +32,25 @@ function exeBugspots(callback) {
 
 function storeBugspotsData(bugspots) {
   return chrome.storage.local.set({'bugspots': bugspots}, function () {
-    console.log('set bugspots: ' + bugspots);
+    console.log('set bugspots data: ' + bugspots);
   })
 }
 
 function turnOn() {
+  startLoading();
   return exeBugspots(function (data) {
     storeBugspotsData(data);
     addScore(data);
+    endLoading();
   });
 }
 
 function turnOff() {
-  chrome.storage.local.remove('bugspots', function (data) {
-    console.log('remove bugspots');
+  chrome.storage.local.remove('bugspots', function () {
+    console.log('remove bugspots data');
   });
   removeScore();
+  endLoading();
 }
 
 function addScore(data) {
@@ -80,6 +83,16 @@ function addScore(data) {
   }
 }
 
+function startLoading() {
+  let button = document.querySelector('input.gb-button');
+  button.setAttribute("src", "data:image/gif;base64,R0lGODlhEAAQANUAAP////39/fv7+/n5+ff39/X19fPz8/Hx8e/v7+3t7enp6efn5+Xl5ePj49/f393d3dvb29nZ2dfX19XV1dPT09HR0c/Pz83NzcXFxb+/v7Ozs6+vr62trampqZ+fn5mZmY2NjYODg35+fm5ubmZmZmRkZFhYWD4+PjIyMi4uLg4ODgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFBwAsACwCAAIADAAMAAAGYUCWULhaDYcRk4F1SrECD4LQhPqwRCOWYvIQGj6oSGYjkCwCR4ZGiJAKSaGO5WhQPCokkCZyPDAiFUMJfCwJA0cDFx8GCAYEFGdCHB8XLA0MLAwWhAkchxN8ARFuRxeVR0EAIfkEBQcALAAsAgACAAsACwAABkBAllCIQg2FjZCQZGIhUhZWiKRhfUAs0Sol1JAal4xDNUIMExihJ2rlYBzH4UdzYcTjhcRdyLgM9hN1eywFE4NBACH5BAUHACwALAIAAgAMAAoAAAY/QJZQSCINhwnOgAUKCU0RIedzYWk6rA/KJBxcPomIhXECHVmGqFXNukwaiGNGdFpdIgzDcTNKrc6AgYKBE0JBACH5BAUHACwALAMAAgALAAsAAAZCQJaQ9fkMhYWJUMMRhhqsyYXBumBYGlJIyLgUGI7EqHMcJIQY6HF9+ZBQa2EGZIKvPY740KISIfQsIyspgAgpFixBACH5BAUHACwALAcAAgAHAAwAAAY7wMuFRSRGJqwBJ8FiNFiXD4dlQBg8mEExwiwaNSBS0dIJiVkaRnGTiZw+xJGIBUKZWKkT0RRhrVZeLEEAIfkEBQcALAAsAwADAAsACwAABj9AlnAonBSIRMZlghQOLI2mMHGUCpWaj9SB4WhZFo8QkxgiRCtH5tIYaYSplYgF0nZIIXAKwTKRhCFRRCgoSEEAIfkEBQcALAAsAgAHAAwABwAABjjAVWq0YRlZBkbksjqJMkcWojG5HCMaY8QQZX1QDEsk4bkMjCbUh9XJYj4crckYArEGnESXRSJ1gwAh+QQJBwAsACwCAAIADAAMAAAGQkCWcEgcWlKIIjG1EimHCNHK8hw6PE+UCZSpokifS3XYwAgTg6KGlHAwChbGMETSsDDixmUibISEHHYsEwVKHx9FQQA7");
+}
+
+function endLoading() {
+  let button = document.querySelector('input.gb-button');
+  button.setAttribute("src", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACLlBMVEUAAAAqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgqstgqstgsstkqstgqstgqstgqstgqstgsstkqstgqstgqstgpsdgqstgqstgqstgts9gqstgpstgqstgttNkpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgosdgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstj///8rAbqCAAAAuHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwdARpZ7UDEML8D59fT8oS4IP+bph0NJmvPXIQt18mhSPAOK7mIHKd/PKnjWxmY06b8RDL3AEov3aBzdnQQo1OAiW7/AOD7xuRZN9aEwDxY3vOgwMbTsz5KY2+KdHAEGkcvp4MpzABBibmFjb1YHTPTxOFv85S6O/c4SKub3agM4XXUACYZRLwMKAQsBWiMI7AAAAAFiS0dEuTq4FmAAAAAHdElNRQfiBwgXNCaQgicpAAAA6ElEQVQY02NgAANGbR0mBjhgZtHV0zcwNGKF8tmMTUzNzC0sraxt2MECHLZ29g6OTs4urm6cID6Xu4enF7e3j6+ff0AgD1CANyg4JDQsPCIyKjomlg8owB8Xn5CYtCM5JTUtPUMAKCCYmZWdk5uXX1BYVFwiBBQQFiktK6+orKquqa0TFQOZKl7f0NjU3NLa1t4hAbZWsrOru6e3r3+C1ERpiMtkJk2eMnXa9BkzZSF8OflZs+fMnTd/wUIFiICi0qLFS5YuW75ipbIKWEB11eo1a9et37Bxk5o61Hsam7dobt22XQvEBgCP3EJ9EpKLQwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wNy0wOFQyMzo1MjozOC0wNDowMDdKhBkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDctMDhUMjM6NTI6MzgtMDQ6MDBGFzylAAAAAElFTkSuQmCC");
+}
+
 function removeScore() {
   let scores = document.querySelectorAll('a.gb-score');
   if (scores) {
@@ -92,7 +105,7 @@ function removeScore() {
 (function onload() {
   const commitBar = document.querySelector('.commit-tease');
   if(!commitBar) {
-    return
+    return;
   }
   
   let div = document.createElement('div');
