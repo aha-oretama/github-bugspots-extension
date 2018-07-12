@@ -31,8 +31,8 @@ function exeBugspots(callback) {
 }
 
 function storeBugspotsData(bugspots) {
-  return chrome.storage.local.set({'bugspots': bugspots}, function (data) {
-    console.log('set bugspots: ' + data.bugspots);
+  return chrome.storage.local.set({'bugspots': bugspots}, function () {
+    console.log('set bugspots: ' + bugspots);
   })
 }
 
@@ -50,9 +50,9 @@ function turnOff() {
   removeScore();
 }
 
-function addScore() {
+function addScore(data) {
   let fileNames = Array.from(document.querySelectorAll('td.content > span > a'), it => it.innerHTML);
-  let ageSpans = document.querySelector('td.age > span').innerHTML;
+  let ageSpans = document.querySelectorAll('td.age > span');
 
   // 該当ページでなければスキップ
   if(!ageSpans) {
@@ -60,20 +60,19 @@ function addScore() {
   }
   
   const url = location.href;
-  chrome.storage.local.get('bugspots', function (data) {
-    for(let spot of data.bugspots.spots) {
-      for (let i = 0; i < fileNames.length; i++) {
-        
-        // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
-        if((`${url}/${fileNames[i]}`).endsWith(spot.file)) {
-          let score = document.createElement('a');
-          score.className = 'score';
-          score.innerHTML(`${spot.score}`);
-          ageSpans[i].appendChild();
-        }
+  for (let spot of data.spots) {
+    for (let i = 0; i < fileNames.length; i++) {
+      
+      // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
+      if ((`${url}/${fileNames[i]}`).endsWith(spot.file)) {
+        let score = document.createElement('a');
+        let text = document.createTextNode(`${spot.score}`);
+        score.appendChild(text);
+        score.className = 'score';
+        ageSpans[i].appendChild(score);
       }
     }
-  });
+  }
 }
 
 function removeScore() {
