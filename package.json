@@ -9,17 +9,17 @@
     "build": "webpack"
   },
   "dependencies": {
-    "github-bugspots": "^0.1.0",
-    "lodash": "^4.17.10"
+    "github-bugspots": "0.1.0",
+    "lodash": "4.17.10"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "clean-webpack-plugin": "^0.1.19",
-    "copy-webpack-plugin": "^4.5.1",
-    "webpack": "^4.10.2",
-    "webpack-cli": "^3.0.0"
+    "babel-core": "6.26.3",
+    "babel-loader": "7.1.4",
+    "babel-polyfill": "6.26.0",
+    "babel-preset-env": "1.7.0",
+    "clean-webpack-plugin": "0.1.19",
+    "copy-webpack-plugin": "4.5.1",
+    "webpack": "4.10.2",
+    "webpack-cli": "3.0.0"
   }
 }
