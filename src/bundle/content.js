@@ -123,7 +123,7 @@ function removeScore() {
   }
 }
 
-(function onload() {
+function onload() {
   const commitBar = document.querySelector('.commit-tease');
   if(!commitBar) {
     return;
@@ -157,4 +157,16 @@ function removeScore() {
   div.appendChild(button);
   const lastChild = _.last(commitBar.querySelectorAll('div'));
   commitBar.insertBefore(div, lastChild);
-})();
+}
+
+// This is for browser refrech or access by direct url.
+onload();
+
+// This is for detecting URL changes in single page application.
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  // listen for messages sent from background.js
+  if (request.message === 'url-changed') {
+    // To use script after changing URL.
+    setTimeout(onload, 1000);
+  }
+});
