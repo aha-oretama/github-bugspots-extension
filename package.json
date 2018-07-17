@@ -9,7 +9,7 @@
     "build": "webpack"
   },
   "dependencies": {
-    "github-bugspots": "0.1.0",
+    "github-bugspots": "1.0.1",
     "lodash": "4.17.10"
   },
   "devDependencies": {

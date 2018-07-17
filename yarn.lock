@@ -1549,9 +1549,9 @@ get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
 
-github-bugspots@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/github-bugspots/-/github-bugspots-0.1.0.tgz#d21f45802136c9bfc283d794c52483ce9fcf09d0"
+github-bugspots@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/github-bugspots/-/github-bugspots-1.0.1.tgz#ccd20fe44bfe9b97d0a7d06e7a410893cd49da16"
   dependencies:
     "@octokit/rest" "^15.8.0"
     colors "^1.3.0"
