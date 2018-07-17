@@ -12,20 +12,13 @@ import Bugspots from 'github-bugspots';
  */
 function exeBugspots(callback) {
   const branch = document.querySelector('.branch-select-menu > button > span').innerHTML;
-  
-  const parseUrl = (url) => {
-    const parts = url.split('/'); // https://github.com/aha-oretama/github-bugspots-extension
-    const organization = parts[3];
-    const repository = parts[4];
-    return {organization, repository}
-  };
-  
+
   return chrome.storage.sync.get(['token','regex'], function(data) {
     if(!data.token) {
       return callback({tokenError: true});
     }
     
-    const parse = parseUrl(location.href);
+    const parse = parseUrl();
     return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, new RegExp(data.regex, "i"))
       .then(callback)
       .catch(e => {
@@ -35,9 +28,24 @@ function exeBugspots(callback) {
   });
 }
 
-function storeBugspotsData(bugspots) {
-  return chrome.storage.local.set({'bugspots': bugspots}, function () {
-    console.log('set bugspots data: ' + bugspots);
+function parseUrl(){
+  const parts = location.href.split('/'); // ex. https://github.com/aha-oretama/github-bugspots-extension
+  const organization = parts[3];
+  const repository = parts[4];
+  return {organization, repository}
+}
+
+function storeBugspotsData(data) {
+  const parse = parseUrl();
+  const storeData = {
+    githubBugspots: {
+      bugspots: data,
+      organization: parse.organization,
+      repository: parse.repository
+    }
+  };
+  return chrome.storage.local.set(storeData, function () {
+    console.log('set github-bugspots data: ' + storeData);
   })
 }
 
@@ -58,23 +66,41 @@ function turnOn() {
     addScore(data);
   };
   
-  return chrome.storage.local.get('bugspots', function (data) {
-    if(Object.keys(data).length === 0) {
-      return exeBugspots(innerTurnOn);
+  return chrome.storage.local.get('githubBugspots', function (data) {
+    if(isTargetRepository(data)) {
+      return innerTurnOn(data.githubBugspots.bugspots);
     }
-    return innerTurnOn(data.bugspots);
+    return exeBugspots(innerTurnOn);
   });
 }
 
+function isTargetRepository(data) {
+  if (Object.keys(data).length === 0) {
+    return false;
+  }
+  if (data.hasOwnProperty('githubBugspots') &&
+    data.githubBugspots.hasOwnProperty('organization') &&
+    data.githubBugspots.hasOwnProperty('repository')) {
+
+    const parse = parseUrl();
+    return data.githubBugspots.organization === parse.organization && data.githubBugspots.repository === parse.repository
+  }
+  return false;
+}
+
 function turnOff() {
-  chrome.storage.local.remove('bugspots', function () {
-    console.log('remove bugspots data');
+  chrome.storage.local.remove('githubBugspots', function () {
+    console.log('remove github-bugspots data');
   });
   removeScore();
   endLoading();
 }
 
 function addScore(data) {
+  if (document.querySelectorAll('a.gb-score').length !== 0) {
+    return;
+  }
+
   let fileNames = Array.from(document.querySelectorAll('td.content > span > a'), it => it.innerHTML);
   let isFile = Array.from(document.querySelectorAll('tr.js-navigation-item > td.icon > svg'), it => it.classList.contains('octicon-file'));
   let ageSpans = document.querySelectorAll('td.age > span');
@@ -116,10 +142,8 @@ function endLoading() {
 
 function removeScore() {
   let scores = document.querySelectorAll('a.gb-score');
-  if (scores) {
-    for(let score of scores) {
-      score.remove();
-    }
+  for (let score of scores) {
+    score.remove();
   }
 }
 
@@ -128,7 +152,17 @@ function onload() {
   if(!commitBar) {
     return;
   }
-  
+
+  chrome.storage.local.get('githubBugspots', function (data) {
+    if (isTargetRepository(data)) {
+      document.querySelector('input.gb-button').classList.add('selected');
+      addScore(data.githubBugspots.bugspots);
+    }
+  });
+  if (document.querySelector('input.gb-button')) {
+    return;
+  }
+
   let div = document.createElement('div');
   div.className = 'gb-controller';
   let button = document.createElement('input');
@@ -147,13 +181,7 @@ function onload() {
       turnOn();
     }
   });
-  chrome.storage.local.get('bugspots', function (data) {
-    if (Object.keys(data).length !== 0) {
-      document.querySelector('input.gb-button').classList.add('selected');
-      addScore(data.bugspots);
-    }
-  });
-  
+
   div.appendChild(button);
   const lastChild = _.last(commitBar.querySelectorAll('div'));
   commitBar.insertBefore(div, lastChild);
