@@ -101,6 +101,35 @@ function addScore(data) {
     return;
   }
 
+  if(location.href.includes('blob')) {
+    addScoreToFile(data);
+    return;
+  }
+  addScoreToTree(data);
+}
+
+function addScoreToFile(data) {
+  let commitTease = document.querySelector('div.commit-tease > span');
+  // 該当ページでなければスキップ
+  if(!commitTease) {
+    return;
+  }
+
+  const branch = document.querySelector('.branch-select-menu > button > span').innerHTML;
+  const filePath = location.href.split(`${branch}/`)[1];
+
+  let text = `${Number(0).toFixed(4)}`;
+  for (let spot of data.spots) {
+    // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
+    if (filePath == spot.file) {
+      text = `${spot.score.toFixed(4)}`;
+    }
+  }
+
+  commitTease.insertBefore(createTag(text), commitTease.firstChild);
+}
+
+function addScoreToTree(data) {
   let fileNames = Array.from(document.querySelectorAll('td.content > span > a'), it => it.innerHTML);
   let isFile = Array.from(document.querySelectorAll('tr.js-navigation-item > td.icon > svg'), it => it.classList.contains('octicon-file'));
   let ageSpans = document.querySelectorAll('td.age > span');
@@ -109,10 +138,10 @@ function addScore(data) {
   if(!ageSpans) {
     return;
   }
-  
+
   const url = location.href;
   for (let i = 0; i < fileNames.length; i++) {
-    let text = isFile[i] ? `${Number(0).toFixed(4)}` : '-' ;
+    let text = isFile[i] ? `${Number(0).toFixed(4)}` : 'no' ;
 
     for (let spot of data.spots) {
       // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
@@ -120,14 +149,18 @@ function addScore(data) {
         text = `${spot.score.toFixed(4)}`;
       }
     }
-    
-    let score = document.createElement('a');
-    let textNode = document.createTextNode(text);
-    score.appendChild(textNode);
-    score.className = 'gb-score';
+
     let firstChild = ageSpans[i].firstChild;
-    ageSpans[i].insertBefore(score, firstChild);
+    ageSpans[i].insertBefore(createTag(text), firstChild);
   }
+}
+
+function createTag(text) {
+  let score = document.createElement('a');
+  let textNode = document.createTextNode(`${text} points`);
+  score.appendChild(textNode);
+  score.className = 'gb-score';
+  return score;
 }
 
 function startLoading() {
