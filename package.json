@@ -18,7 +18,7 @@
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
     "clean-webpack-plugin": "0.1.19",
-    "copy-webpack-plugin": "4.5.2",
+    "copy-webpack-plugin": "4.5.4",
     "webpack": "4.20.2",
     "webpack-cli": "3.1.2"
   }
