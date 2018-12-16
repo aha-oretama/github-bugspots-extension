@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
 
 module.exports = {
   entry: ['@babel/polyfill', './src/bundle/content.js'],
@@ -26,7 +27,10 @@ module.exports = {
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([{
       from: 'src/origin'
-    }])
+    }]),
+    new ZipPlugin({
+      filename: 'github-bugspots-extension.zip',
+    })
   ],
   devtool: 'inline-source-map'
 };
