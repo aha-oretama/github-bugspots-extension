@@ -22,6 +22,7 @@ jobs:
         - v1-dependencies-
 
     - run: npm install
+    - run: npm run build
 
     - save_cache:
         paths:
@@ -31,4 +32,40 @@ jobs:
     # run tests!
     - run: npm test
 
+    - persist_to_workspace:
+        root: .
+        paths:
+          - dist/*
 
+  release:
+    docker:
+    # specify the version you desire here
+    - image: circleci/node:8.12
+
+    working_directory: ~/repo
+
+    steps:
+    - checkout
+
+    - attach_workspace:
+        at: dist
+
+    - run: npm install
+    - run:
+        command: |
+          token="$(npx chrome-webstore-manager refresh_token --client_id ${CLIENT_ID} --client_secret ${CLIENT_SECRET} --refresh_token ${REFRESH_TOKEN})"
+          echo 'export WEBSTORE_TOKEN="${token}"' >> $BASH_ENV
+          npx chrome-webstore-manager update gcgnjkmkkdllmfeeggghobokcnnfmjgg ./dist/github-bugspots-extension.zip
+          npx chrome-webstore-manager publish gcgnjkmkkdllmfeeggghobokcnnfmjgg
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
