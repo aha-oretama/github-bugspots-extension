@@ -21,12 +21,20 @@ describe('backgroud.js', function () {
     await browser.close();
   });
 
-  it('should return -1 when the value is not present', async function () {
+  it('GitHub repository page has a bugspots button', async function () {
     const page = await browser.newPage();
     await page.goto('https://github.com/igrigorik/bugspots');
 
     const bugspots = await page.$x('//button[text()="Display bugspots"]');
-    assert.equal(bugspots.size(), 1);
+    assert.equal(bugspots.length, 1);
+  });
+
+  it('Other repository page has no bugspots buttons', async function () {
+    const page = await browser.newPage();
+    await page.goto('https://www.google.co.jp/');
+
+    const bugspots = await page.$x('//button[text()="Display bugspots"]');
+    assert.equal(bugspots.length, 0);
   });
 });
 
