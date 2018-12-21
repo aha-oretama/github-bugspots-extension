@@ -29,6 +29,7 @@ module.exports = {
       from: 'src/origin'
     }]),
     new ZipPlugin({
+      path: '../output',
       filename: 'github-bugspots-extension.zip',
     })
   ],
