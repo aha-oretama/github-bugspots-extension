@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "github-bugspots-extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Display bugspots in GitHub.",
   "permissions": [
     "activeTab",
@@ -10,7 +10,9 @@
     "tabs"
   ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
   },
   "page_action": {
@@ -25,8 +27,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://github.com/*/*"],
-      "css": ["content.css"],
+      "matches": [
+        "https://github.com/*/*"
+      ],
+      "css": [
+        "content.css"
+      ],
       "js": [
         "content.bundle.js"
       ]
@@ -37,5 +43,6 @@
     "32": "images/logo32.png",
     "48": "images/logo48.png",
     "128": "images/logo128.png"
-  }
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq3wavMeUxelnJcJSNPDAj8S6f3nGvgiCWe9uQnMrt0vhvv9te73t2GlbUShYwYDeU4M/SXW0FRvpDpGBZ5yiti+ht/kNbP50TwMPj05PoX0rltR815yj0qKeIXiT8mUpfSEacH1/Nk115eV6GNXytpbbCZ6t8Rm04ebEmks+74mO/KAwwcbAxlF40tMC6cUjz9S8qP7937B5HnH8xanapi13TGoP1Leg9AaRIzUretuAy4mmlJnIpHM8kOleDNUhuNmM1oubq8DcUh+MD9YYZxzMYtVRVLAJZKaezDrxpr9cF4UEymbROZzXD4r8JIfkDFo81EkAmMbjB/E52y332QIDAQAB"
 }

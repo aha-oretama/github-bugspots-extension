@@ -1,4 +1,10 @@
 {
+  "baseBranches" : [
+    "develop"
+  ],
+  "devDependencies": {
+    "automerge": true
+  },
   "extends": [
     "config:base"
   ]
