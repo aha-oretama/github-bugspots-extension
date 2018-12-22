@@ -24,7 +24,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['dist', 'output']),
     new CopyWebpackPlugin([{
       from: 'src/origin'
     }]),

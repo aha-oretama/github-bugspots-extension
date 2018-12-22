@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "github-bugspots-extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Display bugspots in GitHub.",
   "permissions": [
     "activeTab",
@@ -44,5 +44,5 @@
     "48": "images/logo48.png",
     "128": "images/logo128.png"
   },
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzbtZdeJeTQaL/1GMm/iU2wtGBmlCWDoalsPskE8mDbOS7ryXHIyL1v91q/9qpElcIxVChEYLqK3q9RNzqMEYb3yugw6JX/R2vTNGmXJNPrADf8/YFUJUA84QcFE4hKvfmwPLJlF3iJu/57gzGrs2HxS1A86xtY5KnPo/wsP+DagO/B4fbAXfcPG6ca3dFWrKmGEpx9faRIqlbkCSOOGSEtW7EH1hxjjNYHc9eyaOjXCBPC0N439EvrGtM8hUKJPHwG2TV9inuBBUjOw3/dQNojbaDK73wiC75d/vsqwMfaVpJCCkc/mefvAOabkuA5ZS0UJEnc2noULs7+I8NRpFSQIDAQAB"
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq3wavMeUxelnJcJSNPDAj8S6f3nGvgiCWe9uQnMrt0vhvv9te73t2GlbUShYwYDeU4M/SXW0FRvpDpGBZ5yiti+ht/kNbP50TwMPj05PoX0rltR815yj0qKeIXiT8mUpfSEacH1/Nk115eV6GNXytpbbCZ6t8Rm04ebEmks+74mO/KAwwcbAxlF40tMC6cUjz9S8qP7937B5HnH8xanapi13TGoP1Leg9AaRIzUretuAy4mmlJnIpHM8kOleDNUhuNmM1oubq8DcUh+MD9YYZxzMYtVRVLAJZKaezDrxpr9cF4UEymbROZzXD4r8JIfkDFo81EkAmMbjB/E52y332QIDAQAB"
 }

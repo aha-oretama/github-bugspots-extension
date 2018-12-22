@@ -23,7 +23,7 @@ describe('backgroud.js', function () {
 
   it('popup', async function () {
     const page = await browser.newPage();
-    await page.goto('chrome-extension://ngohondcannnilnjkecjlcopkkklgcle/popup.html');
+    await page.goto('chrome-extension://gcgnjkmkkdllmfeeggghobokcnnfmjgg/popup.html');
 
     const id = await page.$('input[id="token"]');
     const regex = await page.$('input[id="regex"]');
