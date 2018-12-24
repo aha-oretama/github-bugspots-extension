@@ -6,7 +6,7 @@
 import Bugspots from 'github-bugspots';
 import React from 'react';
 import ReactDom from 'react-dom';
-import BugspotsButton from './bugspots-button';
+import BugspotsButton from './components/bugspots-button';
 
 /**
  * 画面要素、URLなどからパラメータを取得し、github-bugspotsを実行する。
@@ -201,11 +201,7 @@ function onload() {
 
   let item = document.createElement('li');
   buttonGroups.insertBefore(item, buttonGroups.firstChild);
-
-  ReactDom.render(
-    <BugspotsButton/>,
-    item
-  );
+  ReactDom.render(<BugspotsButton/>, item);
 }
 
 // This is for browser refrech or access by direct url.
