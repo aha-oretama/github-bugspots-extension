@@ -5,6 +5,7 @@ const ZipPlugin = require('zip-webpack-plugin');
 
 module.exports = {
   entry: ['@babel/polyfill', './src/bundle/content.js'],
+  mode: 'production',
   output: {
     filename: 'content.bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -32,6 +33,5 @@ module.exports = {
       path: '../output',
       filename: 'github-bugspots-extension.zip',
     })
-  ],
-  devtool: 'inline-source-map'
+  ]
 };
