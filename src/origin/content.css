@@ -1,19 +1,9 @@
 /* important means that this css overrides site css. */
 
 .gb-button {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    border-right-width: 1px !important;
-    border-top-right-radius: 3px !important;;
-    border-bottom-right-radius: 3px !important;;
 }
 
 .gb-button + .BtnGroup-item {
-    border-left-width: 1px !important;
-    border-top-left-radius: 3px !important;
-    border-bottom-left-radius: 3px !important;
 }
 
 .gb-button-icon {

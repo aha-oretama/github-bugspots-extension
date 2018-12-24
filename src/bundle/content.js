@@ -4,6 +4,9 @@
  * @Date 2018/05/27.
  */
 import Bugspots from 'github-bugspots';
+import React from 'react';
+import ReactDom from 'react-dom';
+import BugspotsButton from './bugspots-button';
 
 /**
  * 画面要素、URLなどからパラメータを取得し、github-bugspotsを実行する。
@@ -13,11 +16,11 @@ import Bugspots from 'github-bugspots';
 function exeBugspots(callback) {
   const branch = document.querySelector('.branch-select-menu > button > span').innerHTML;
 
-  return chrome.storage.sync.get(['token','regex'], function(data) {
-    if(!data.token) {
+  return chrome.storage.sync.get(['token', 'regex'], function (data) {
+    if (!data.token) {
       return callback({tokenError: true});
     }
-    
+
     const parse = parseUrl();
     return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, new RegExp(data.regex, "i"))
       .then(callback)
@@ -28,7 +31,7 @@ function exeBugspots(callback) {
   });
 }
 
-function parseUrl(){
+function parseUrl() {
   const parts = location.href.split('/'); // ex. https://github.com/aha-oretama/github-bugspots-extension
   const organization = parts[3];
   const repository = parts[4];
@@ -61,13 +64,13 @@ function turnOn() {
       window.alert("github-bugspots has errors. Please report the issue(https://github.com/aha-oretama/github-bugspots-extension/issues).")
       return;
     }
-    
+
     storeBugspotsData(data);
     addScore(data);
   };
-  
+
   return chrome.storage.local.get('githubBugspots', function (data) {
-    if(isTargetRepository(data)) {
+    if (isTargetRepository(data)) {
       return innerTurnOn(data.githubBugspots.bugspots);
     }
     return exeBugspots(innerTurnOn);
@@ -101,7 +104,7 @@ function addScore(data) {
     return;
   }
 
-  if(location.href.includes('blob')) {
+  if (location.href.includes('blob')) {
     addScoreToFile(data);
     return;
   }
@@ -111,7 +114,7 @@ function addScore(data) {
 function addScoreToFile(data) {
   let commitTease = document.querySelector('div.commit-tease > span');
   // 該当ページでなければスキップ
-  if(!commitTease) {
+  if (!commitTease) {
     return;
   }
 
@@ -135,13 +138,13 @@ function addScoreToTree(data) {
   let ageSpans = document.querySelectorAll('td.age > span');
 
   // 該当ページでなければスキップ
-  if(!ageSpans) {
+  if (!ageSpans) {
     return;
   }
 
   const url = location.href;
   for (let i = 0; i < fileNames.length; i++) {
-    let text = isFile[i] ? `${Number(0).toFixed(4)}` : 'no' ;
+    let text = isFile[i] ? `${Number(0).toFixed(4)}` : 'no';
 
     for (let spot of data.spots) {
       // The fileNames inclue only file's name , not include path. Therefore, concat url and fileNames.
@@ -181,8 +184,8 @@ function removeScore() {
 }
 
 function onload() {
-  const buttonGroups = document.querySelector('.file-navigation > .BtnGroup');
-  if(!buttonGroups) {
+  const buttonGroups = document.querySelector('.pagehead-actions');
+  if (!buttonGroups) {
     return;
   }
 
@@ -196,27 +199,13 @@ function onload() {
     return;
   }
 
-  let button = document.createElement('button');
-  button.className = 'btn btn-sm BtnGroup-item gb-button';
-  button.innerText = 'Display bugspots';
-  let image = document.createElement('img');
-  image.className = 'gb-button-icon';
-  image.setAttribute('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAACLlBMVEUAAAAqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgrstgqstgqstgqstgqstgqstgqstgqstgqstgsstkqstgqstgqstgqstgqstgsstkqstgqstgqstgpsdgqstgqstgqstgts9gqstgpstgqstgttNkpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgpstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstgosdgqstgqstgqstgqstgqstgqstgqstgqstgqstgqstj///8rAbqCAAAAuHRSTlMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwdARpZ7UDEML8D59fT8oS4IP+bph0NJmvPXIQt18mhSPAOK7mIHKd/PKnjWxmY06b8RDL3AEov3aBzdnQQo1OAiW7/AOD7xuRZN9aEwDxY3vOgwMbTsz5KY2+KdHAEGkcvp4MpzABBibmFjb1YHTPTxOFv85S6O/c4SKub3agM4XXUACYZRLwMKAQsBWiMI7AAAAAFiS0dEuTq4FmAAAAAHdElNRQfiBwgXNCaQgicpAAAA6ElEQVQY02NgAANGbR0mBjhgZtHV0zcwNGKF8tmMTUzNzC0sraxt2MECHLZ29g6OTs4urm6cID6Xu4enF7e3j6+ff0AgD1CANyg4JDQsPCIyKjomlg8owB8Xn5CYtCM5JTUtPUMAKCCYmZWdk5uXX1BYVFwiBBQQFiktK6+orKquqa0TFQOZKl7f0NjU3NLa1t4hAbZWsrOru6e3r3+C1ERpiMtkJk2eMnXa9BkzZSF8OflZs+fMnTd/wUIFiICi0qLFS5YuW75ipbIKWEB11eo1a9et37Bxk5o61Hsam7dobt22XQvEBgCP3EJ9EpKLQwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxOC0wNy0wOFQyMzo1MjozOC0wNDowMDdKhBkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTgtMDctMDhUMjM6NTI6MzgtMDQ6MDBGFzylAAAAAElFTkSuQmCC');
-  button.insertBefore(image, button.firstChild);
+  let item = document.createElement('li');
+  buttonGroups.insertBefore(item, buttonGroups.firstChild);
 
-  button.addEventListener('click', function (event) {
-    let button = event.target;
-    if (button.classList.contains('selected')) {
-      button.classList.remove('selected');
-      turnOff();
-      removeScore();
-    } else {
-      button.classList.add('selected');
-      turnOn();
-    }
-  });
-
-  buttonGroups.insertBefore(button, buttonGroups.firstChild);
+  ReactDom.render(
+    <BugspotsButton/>,
+    item
+  );
 }
 
 // This is for browser refrech or access by direct url.

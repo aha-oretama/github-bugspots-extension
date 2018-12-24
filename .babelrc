@@ -1,6 +1,7 @@
 {
   "presets": [
     "power-assert",
+    "@babel/preset-react",
     [
       "@babel/preset-env",
       {

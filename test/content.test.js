@@ -25,7 +25,7 @@ describe('backgroud.js', function () {
     const page = await browser.newPage();
     await page.goto('https://github.com/igrigorik/bugspots');
 
-    const bugspots = await page.$x('//button[text()="Display bugspots"]');
+    const bugspots = await page.$x('//button[text()="Bugspots"]');
     assert.equal(bugspots.length, 1);
   });
 
