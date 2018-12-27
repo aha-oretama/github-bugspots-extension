@@ -7,12 +7,14 @@ module.exports = {
   mode: 'development',
   output: {
     filename: 'content.bundle.js',
-    path: path.resolve(__dirname, 'dev')
+    path: path.resolve(__dirname, 'dev/igrigorik/bugspots')
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: path.resolve(__dirname, 'dev'),
-    index: 'test.html'
+    contentBase: path.resolve(__dirname, 'dev/igrigorik/bugspots'),
+    index: 'test.html',
+    publicPath: 'http://localhost:8080/igrigorik/bugspots/',
+    openPage: 'igrigorik/bugspots/test.html'
   },
   module: {
     rules: [
@@ -33,7 +35,7 @@ module.exports = {
     new CopyWebpackPlugin([{
       from: path.resolve(__dirname, 'src/origin')
     }, {
-      from: path.resolve(__dirname, 'test/test.html')
+      from: path.resolve(__dirname, 'test/support/test.html')
     }])
   ],
 };

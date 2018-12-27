@@ -23,11 +23,11 @@ function exeBugspots(callback) {
 
     const parse = parseUrl();
     return new Bugspots(parse.organization, parse.repository, data.token).analyze(branch, new RegExp(data.regex, "i"))
-      .then(callback)
-      .catch(e => {
-        console.log(e);
-        callback({error: true})
-      });
+        .then(callback)
+        .catch(e => {
+          console.log(e);
+          callback({error: true})
+        });
   });
 }
 
@@ -82,8 +82,8 @@ function isTargetRepository(data) {
     return false;
   }
   if (data.hasOwnProperty('githubBugspots') &&
-    data.githubBugspots.hasOwnProperty('organization') &&
-    data.githubBugspots.hasOwnProperty('repository')) {
+      data.githubBugspots.hasOwnProperty('organization') &&
+      data.githubBugspots.hasOwnProperty('repository')) {
 
     const parse = parseUrl();
     return data.githubBugspots.organization === parse.organization && data.githubBugspots.repository === parse.repository
@@ -189,19 +189,28 @@ function onload() {
     return;
   }
 
-  chrome.storage.local.get('githubBugspots', function (data) {
-    if (isTargetRepository(data)) {
-      document.querySelector('button.gb-button').classList.add('selected');
-      addScore(data.githubBugspots.bugspots);
-    }
-  });
+  // chrome.storage.local.get('githubBugspots', function (data) {
+  //   if (isTargetRepository(data)) {
+  //     document.querySelector('button.gb-button').classList.add('selected');
+  //     addScore(data.githubBugspots.bugspots);
+  //   }
+  // });
   if (document.querySelector('button.gb-button')) {
     return;
   }
 
+  // All the dom and other parameter
+  const {organization, repository} = parseUrl();
+  const branchElement = document.querySelector('.branch-select-menu > button > span');
+  const branch = branchElement ? branchElement.innerHTML : 'master';
+  const spots = [
+    {file: 'filename', score: 1000},
+    {file: 'secondeFile', score: 20},
+  ];
+
   let item = document.createElement('li');
   buttonGroups.insertBefore(item, buttonGroups.firstChild);
-  ReactDom.render(<BugspotsButton/>, item);
+  ReactDom.render(<BugspotsButton spots={spots}/>, item);
 }
 
 // This is for browser refrech or access by direct url.
