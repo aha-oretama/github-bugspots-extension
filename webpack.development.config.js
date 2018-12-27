@@ -31,11 +31,13 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dev']),
+    // new CleanWebpackPlugin(['dev']),
     new CopyWebpackPlugin([{
       from: path.resolve(__dirname, 'src/origin')
     }, {
       from: path.resolve(__dirname, 'test/support/test.html')
+    }, {
+      from: path.resolve(__dirname, 'test/support/background.js')
     }])
   ],
 };
