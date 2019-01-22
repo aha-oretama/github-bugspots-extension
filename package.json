@@ -22,7 +22,7 @@
     "babel-plugin-espower": "3.0.1",
     "babel-preset-power-assert": "3.0.0",
     "chrome-webstore-manager": "0.4.2",
-    "clean-webpack-plugin": "1.0.0",
+    "clean-webpack-plugin": "1.0.1",
     "copy-webpack-plugin": "4.6.0",
     "mocha": "5.2.0",
     "power-assert": "1.6.1",
