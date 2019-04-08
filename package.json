@@ -24,7 +24,7 @@
     "chrome-webstore-manager": "0.4.2",
     "clean-webpack-plugin": "1.0.1",
     "copy-webpack-plugin": "5.0.2",
-    "mocha": "6.1.1",
+    "mocha": "6.1.2",
     "power-assert": "1.6.1",
     "puppeteer": "1.14.0",
     "webpack": "4.29.6",
