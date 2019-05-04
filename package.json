@@ -14,10 +14,10 @@
     "lodash": "4.17.11"
   },
   "devDependencies": {
-    "@babel/core": "7.4.3",
-    "@babel/polyfill": "7.4.3",
-    "@babel/preset-env": "7.4.3",
-    "@babel/register": "7.4.0",
+    "@babel/core": "7.4.4",
+    "@babel/polyfill": "7.4.4",
+    "@babel/preset-env": "7.4.4",
+    "@babel/register": "7.4.4",
     "babel-loader": "8.0.5",
     "babel-plugin-espower": "3.0.1",
     "babel-preset-power-assert": "3.0.0",
