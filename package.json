@@ -14,9 +14,9 @@
     "lodash": "4.17.11"
   },
   "devDependencies": {
-    "@babel/core": "7.4.5",
+    "@babel/core": "7.5.4",
     "@babel/polyfill": "7.4.4",
-    "@babel/preset-env": "7.4.5",
+    "@babel/preset-env": "7.5.4",
     "@babel/register": "7.4.4",
     "babel-loader": "8.0.6",
     "babel-plugin-espower": "3.0.1",
