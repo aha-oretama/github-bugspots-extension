@@ -10,7 +10,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "github-bugspots": "1.1.2",
+    "github-bugspots": "1.1.3",
     "lodash": "4.17.11"
   },
   "devDependencies": {
